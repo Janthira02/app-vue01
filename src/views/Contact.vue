@@ -11,7 +11,7 @@
       <div class="row">
         <!--Col1-->
         <div class="col-sm-6">
-          <img alt="Vue logo" src="../assets/me1.jpg" />
+          <img alt="Vue logo" src="../assets/cat.jpg" />
         </div>
 
         <!--Col2-->
