@@ -8,7 +8,7 @@
     
   </nav>
 -->
-<nav class="navbar" style="background-color: #6f42c1;" data-bs-theme="light">
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
   <div class="container">
     <a class="navbar-brand" href="/">Navbar</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,10 +20,16 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
+          <a class="nav-link" href="/customer">Customer</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/contact">contact</a>
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/type">Type</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/employees">Employee</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -60,7 +66,6 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: ;
   color: #2c3e50;
 }
 
