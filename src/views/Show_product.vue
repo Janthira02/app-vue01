@@ -47,7 +47,7 @@ export default {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost/app-vue01/php_api/show_product.php"
+          "http://localhost/app-vue01/php_api/show_product.php",
         );
         if (!response.ok) {
           throw new Error("ไม่สามารถดึงข้อมูลได้");

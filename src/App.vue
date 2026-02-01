@@ -34,6 +34,9 @@
         <li class="nav-item">
           <a class="nav-link" href="/product_api">ProductAPI</a>
         </li>
+         <li class="nav-item">
+          <a class="nav-link" href="/customer_crud">Customer_crud</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown
