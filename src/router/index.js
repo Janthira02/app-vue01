@@ -56,6 +56,11 @@ const routes = [
     path: "/customer_crud",
     name: "/customer_crud",
     component: () => import("../views//Customer_crud.vue"),
+  },
+  {
+    path: "/employee_crud",
+    name: "/employee_crud",
+    component: () => import("../views/Empcrud.vue"),
   }
 ];
 
@@ -64,4 +69,4 @@ const router = createRouter({
   routes,
 });
 
-export default router;
+export default router

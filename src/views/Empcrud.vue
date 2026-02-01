@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-3">รายชื่อประเภท</h2>
+    <h2 class="mb-3">รายชื่อพนักงาน</h2>
     
     <div class="mb-3">
       <button class="btn btn-primary" @click="openAddModal">
@@ -11,21 +11,30 @@
     <table class="table table-bordered table-striped">
       <thead class="table-primary">
         <tr>
-          <th>รหัสประเภท</th>
-          <th>ประเภท</th>
+          <th>รหัสพนักงาน</th>
+          <th>ชื่อ-สกุล</th>
+          <th>แผนก</th>
+          <th>เงินเดือน</th>
+          <th>สถานะการทำงาน</th>
           <th>แก้ไข/ลบ</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="type in types" :key="type.type_id">
-          <td>{{ type.type_id }}</td>
-          <td>{{ type.type_name }}</td>
+        <tr v-for="employee in employees" :key="employee.emp_id">
+          <td>{{ employee.emp_id }}</td>
+          <td>{{ employee.full_name }}</td>
+          <td>{{ employee.department }}</td>
+          <td>{{ employee.salary }}</td>
+         <td>
+            <span v-if ="employee.active == 1">ปกติ</span>
+            <span v-else >ลาออก</span>
+          </td>
           <td>
-            <button class="btn btn-warning btn-sm" @click="openEditModal(type)">
+            <button class="btn btn-warning btn-sm" @click="openEditModal(employee)">
               <i class="fa-solid fa-pen-to-square"></i> แก้ไข
             </button>
             |
-            <button class="btn btn-danger btn-sm" @click="deleteType(type.type_id)">
+            <button class="btn btn-danger btn-sm" @click="deleteEmployee(employee.emp_id)">
               <i class="fa-solid fa-trash"></i> ลบ
             </button>
           </td>
@@ -41,17 +50,25 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{ isEditMode ? "แก้ไขข้อมูลประเภท" : "เพิ่มประเภทใหม่" }}</h5>
+            <h5 class="modal-title">{{ isEditMode ? "แก้ไขข้อมูลพนักงาน" : "เพิ่มพนักงานใหม่" }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="saveType">
+            <form @submit.prevent="saveEmployee">
               <div class="mb-3">
-                <label class="form-label">ประเภท</label>
-                <input v-model="editType.type_name" type="text" class="form-control" required>
+                <label class="form-label">ชื่อ-สกุล</label>
+                <input v-model="editEmployee.full_name" type="text" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">แผนก</label>
+                <input v-model="editEmployee.department" type="text" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">เงินเดือน</label>
+                <input v-model="editEmployee.salary" type="number" class="form-control" required>
               </div>
               <button type="submit" class="btn btn-success">
-                {{ isEditMode ? "บันทึกการแก้ไข" : "เพิ่มประเภท" }}
+                {{ isEditMode ? "บันทึกการแก้ไข" : "เพิ่มพนักงาน" }}
               </button>
             </form>
           </div>
@@ -66,22 +83,22 @@
 import { ref, onMounted } from "vue";
 
 export default {
-  name: "TypeList",
+  name: "EmployeeList",
   setup() {
-    const types = ref([]);
+    const employees = ref([]);
     const loading = ref(true);
     const error = ref(null);
-    const editType = ref({});
+    const editEmployee = ref({});
     const isEditMode = ref(false);
     let editModal = null;
 
-    const fetchTypes = async () => {
+    const fetchEmployees = async () => {
       try {
-        const response = await fetch("http://127.0.0.1/app-vue01/php_api/show_type.php");
+        const response = await fetch("http://localhost/app-vue01/php_api/employee_crud.php");
         const result = await response.json();
 
         if (result.success) {
-          types.value = result.data;
+          employees.value = result.data;
         } else {
           error.value = result.message;
         }
@@ -93,42 +110,48 @@ export default {
     };
 
     onMounted(() => {
-      fetchTypes();
+      fetchEmployees();
       const modalEl = document.getElementById("editModal");
       editModal = new window.bootstrap.Modal(modalEl);
     });
 
-    // เปิด Modal เพิ่มประเภทใหม่
+    // เปิด Modal เพิ่มพนักงานใหม่
     const openAddModal = () => {
       isEditMode.value = false;
-      editType.value = { type_name: "" };
+      editEmployee.value = {
+        full_name: "",
+        department: "",
+        salary: "",
+        active: "1"
+        
+      };
       editModal.show();
     };
 
-    // เปิด Modal แก้ไขข้อมูลประเภท
-    const openEditModal = (type) => {
+    // เปิด Modal แก้ไขข้อมูลพนักงาน
+    const openEditModal = (employee) => {
       isEditMode.value = true;
-      editType.value = { ...type };
+      editEmployee.value = { ...employee };
       editModal.show();
     };
 
-    // ฟังก์ชันสำหรับเพิ่ม/แก้ไขข้อมูลประเภท
-    const saveType = async () => {
-      const url = "http://127.0.0.1/app-vue01/php_api/show_type.php";
+    // ฟังก์ชันสำหรับเพิ่ม/แก้ไขข้อมูลพนักงาน
+    const saveEmployee = async () => {
+      const url = "http://localhost/app-vue01/php_api/employee_crud.php";
       const method = isEditMode.value ? "PUT" : "POST";
 
       try {
         const response = await fetch(url, {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(editType.value)
+          body: JSON.stringify(editEmployee.value)
         });
 
         const result = await response.json();
 
         if (result.success) {
           alert(result.message);
-          fetchTypes();
+          fetchEmployees();
           editModal.hide();
         } else {
           alert(result.message);
@@ -138,18 +161,18 @@ export default {
       }
     };
 
-    // ฟังก์ชันลบประเภท
-    const deleteType = async (id) => {
+    // ฟังก์ชันลบพนักงาน
+    const deleteEmployee = async (id) => {
       if (!confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) return;
       try {
-        const response = await fetch("http://127.0.0.1/app-vue01/php_api/show_type.php", {
+        const response = await fetch("http://localhost/app-vue01/php_api/employee_crud.php", {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type_id: id })
+          body: JSON.stringify({ emp_id: id })
         });
         const result = await response.json();
         if (result.success) {
-          types.value = types.value.filter(t => t.type_id !== id);
+          employees.value = employees.value.filter(e => e.emp_id !== id);
           alert(result.message);
         } else {
           alert(result.message);
@@ -160,15 +183,15 @@ export default {
     };
 
     return {
-      types,
+      employees,
       loading,
       error,
-      editType,
+      editEmployee,
       isEditMode,
       openAddModal,
       openEditModal,
-      saveType,
-      deleteType
+      saveEmployee,
+      deleteEmployee
     };
   }
 };
