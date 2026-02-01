@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2026 at 12:10 PM
+-- Generation Time: Feb 01, 2026 at 01:13 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `customers` (
 INSERT INTO `customers` (`customer_id`, `firstName`, `lastName`, `phone`, `username`, `password`) VALUES
 (1, 'สมชาย', 'ใจดี', '0812345678', 'somchai', 'pass1234'),
 (2, 'วิภา', 'สุขสันต์', '0898765432', 'wipa', 'wipa2025'),
-(3, 'John', 'Doe', '0991122334', 'johnd', 'securepwd');
+(3, 'John', 'Doe', '0991122334', 'johnd', 'securepwd'),
+(4, 'จันทิรา', 'โพธิ์ศาราช', '0855174652', 'ajfdlkf', '$2y$10$POlyQckDlsrQa');
 
 -- --------------------------------------------------------
 
@@ -52,7 +53,7 @@ INSERT INTO `customers` (`customer_id`, `firstName`, `lastName`, `phone`, `usern
 --
 
 CREATE TABLE `employees` (
-  `emp_id` varchar(10) NOT NULL,
+  `emp_id` int(10) UNSIGNED ZEROFILL NOT NULL,
   `full_name` varchar(100) NOT NULL,
   `department` varchar(50) NOT NULL,
   `salary` decimal(10,2) NOT NULL,
@@ -65,10 +66,37 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`emp_id`, `full_name`, `department`, `salary`, `active`, `created_at`) VALUES
-('EMP001', 'สมชาย ใจดี', 'IT', '35000.00', 1, '2026-01-18 10:29:14'),
-('EMP002', 'สมหญิง ดีงาม', 'บัญชี', '28000.00', 1, '2026-01-18 10:29:14'),
-('EMP003', 'อนันต์ สุขใจ', 'การตลาด', '25000.00', 0, '2026-01-18 10:29:14'),
-('EMP004', 'สุดา พรมดี', 'ทรัพยากรบุคคล', '32000.00', 1, '2026-01-18 10:29:14');
+(0000000002, 'สมชาย ใจดี', 'IT', '35000.00', 1, '2026-01-18 10:29:14'),
+(0000000003, 'สมหญิง ดีงาม', 'บัญชี', '28000.00', 1, '2026-01-18 10:29:14'),
+(0000000004, 'อนันต์ สุขใจ', 'การตลาด', '25000.00', 0, '2026-01-18 10:29:14'),
+(0000000005, 'สุดา พรมดี', 'ทรัพยากรบุคคล', '32000.00', 1, '2026-01-18 10:29:14'),
+(0000000007, 'นางสาวเมตตา ใจดี', 'แม่บ้าน', '12000.00', 1, '2026-02-01 10:06:34'),
+(0000000008, 'นางสาวขวัญใจ ใบตอง', 'บัญชี', '500000.00', 1, '2026-02-01 11:56:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `product_id` int(11) UNSIGNED ZEROFILL NOT NULL,
+  `product_name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `image` text DEFAULT NULL,
+  `stock` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`product_id`, `product_name`, `description`, `price`, `image`, `stock`, `created_at`) VALUES
+(00000000001, 'เสื้อยืดคอกลม', 'เสื้อยืดผ้าฝ้าย 100% สวมใส่สบาย', '199.00', 'tshirt.jpg', 50, '2026-01-25 04:04:52'),
+(00000000002, 'กางเกงยีนส์', 'กางเกงยีนส์ทรงกระบอก สีฟ้าอ่อน', '799.00', 'jeans.jpg', 30, '2026-01-25 04:04:52'),
+(00000000003, 'รองเท้าผ้าใบ', 'รองเท้าผ้าใบสีขาว ใส่ได้ทุกโอกาส', '1299.00', 'sneakers.jpg', 20, '2026-01-25 04:04:52');
 
 -- --------------------------------------------------------
 
@@ -77,7 +105,7 @@ INSERT INTO `employees` (`emp_id`, `full_name`, `department`, `salary`, `active`
 --
 
 CREATE TABLE `type` (
-  `type_id` int(11) NOT NULL COMMENT 'รหัสสินค้า',
+  `type_id` int(11) UNSIGNED ZEROFILL NOT NULL COMMENT 'รหัสสินค้า',
   `type_name` varchar(30) NOT NULL COMMENT 'ชื่อประเภทสินค้า'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -86,9 +114,9 @@ CREATE TABLE `type` (
 --
 
 INSERT INTO `type` (`type_id`, `type_name`) VALUES
-(1, 'Vespa Sprint 150 S'),
-(2, 'Vespa LX'),
-(3, 'Vespa GTS');
+(00000000002, 'เครื่องเขียน'),
+(00000000003, 'คอมพิวเตอร์'),
+(00000000004, 'ยา');
 
 --
 -- Indexes for dumped tables
@@ -120,13 +148,19 @@ ALTER TABLE `type`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `emp_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `type`
 --
 ALTER TABLE `type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสินค้า', AUTO_INCREMENT=1004;
+  MODIFY `type_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสสินค้า', AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
