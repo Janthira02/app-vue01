@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2026 at 01:13 PM
+-- Generation Time: Feb 15, 2026 at 12:33 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -58,6 +58,7 @@ CREATE TABLE `employees` (
   `department` varchar(50) NOT NULL,
   `salary` decimal(10,2) NOT NULL,
   `active` tinyint(1) DEFAULT 1,
+  `image` varchar(50) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -65,13 +66,14 @@ CREATE TABLE `employees` (
 -- Dumping data for table `employees`
 --
 
-INSERT INTO `employees` (`emp_id`, `full_name`, `department`, `salary`, `active`, `created_at`) VALUES
-(0000000002, 'สมชาย ใจดี', 'IT', '35000.00', 1, '2026-01-18 10:29:14'),
-(0000000003, 'สมหญิง ดีงาม', 'บัญชี', '28000.00', 1, '2026-01-18 10:29:14'),
-(0000000004, 'อนันต์ สุขใจ', 'การตลาด', '25000.00', 0, '2026-01-18 10:29:14'),
-(0000000005, 'สุดา พรมดี', 'ทรัพยากรบุคคล', '32000.00', 1, '2026-01-18 10:29:14'),
-(0000000007, 'นางสาวเมตตา ใจดี', 'แม่บ้าน', '12000.00', 1, '2026-02-01 10:06:34'),
-(0000000008, 'นางสาวขวัญใจ ใบตอง', 'บัญชี', '500000.00', 1, '2026-02-01 11:56:48');
+INSERT INTO `employees` (`emp_id`, `full_name`, `department`, `salary`, `active`, `image`, `created_at`) VALUES
+(0000000002, 'สมชาย ใจดี', 'IT', '35000.00', 1, '', '2026-01-18 10:29:14'),
+(0000000003, 'สมหญิง ดีงาม', 'บัญชี', '28000.00', 1, '', '2026-01-18 10:29:14'),
+(0000000004, 'อนันต์ สุขใจ', 'การตลาด', '25000.00', 0, '', '2026-01-18 10:29:14'),
+(0000000005, 'สุดา พรมดี', 'ทรัพยากรบุคคล', '32000.00', 1, '', '2026-01-18 10:29:14'),
+(0000000007, 'นางสาวเมตตา ใจดี', 'แม่บ้าน', '12000.00', 1, '', '2026-02-01 10:06:34'),
+(0000000008, 'นางสาวขวัญใจ ใบตอง', 'บัญชี', '500000.00', 1, '', '2026-02-01 11:56:48'),
+(0000000014, 'มีนานุช บุญส่ง', 'IT', '50000.00', 1, '1771154795_f5oy1w.jpg', '2026-02-15 11:26:35');
 
 -- --------------------------------------------------------
 
@@ -94,9 +96,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `description`, `price`, `image`, `stock`, `created_at`) VALUES
-(00000000001, 'เสื้อยืดคอกลม', 'เสื้อยืดผ้าฝ้าย 100% สวมใส่สบาย', '199.00', 'p1.jpg', 50, '2026-01-25 04:04:52'),
-(00000000002, 'กางเกงยีนส์', 'กางเกงยีนส์ทรงกระบอก สีฟ้าอ่อน', '799.00', 'p2.jpg', 30, '2026-01-25 04:04:52'),
-(00000000003, 'รองเท้าผ้าใบ', 'รองเท้าผ้าใบสีขาว ใส่ได้ทุกโอกาส', '1299.00', 'p3.jpg', 20, '2026-01-25 04:04:52');
+(00000000000, 'กางเกงขายาว', 'ผ้ายีนส์', '1999.00', '1771145621_download (2).jpg', 80, '2026-02-15 08:53:41'),
+(00000000001, 'เสื้อยืดคอกลม', 'เสื้อยืดผ้าฝ้าย 100% สวมใส่สบาย', '350.00', '1771144826_1771144641_123.jpg', 50, '2026-01-25 04:04:52'),
+(00000000002, 'กางเกงยีนส์', 'กางเกงยีนส์ทรงกระบอก สีฟ้าอ่อน', '799.00', '1771144926_11-1359.1.jpg', 30, '2026-01-25 04:04:52'),
+(00000000003, 'รองเท้าผ้าใบ', 'รองเท้าผ้าใบสีขาว ใส่ได้ทุกโอกาส', '1299.00', '1771146186_download.jpg', 20, '2026-01-25 04:04:52');
 
 -- --------------------------------------------------------
 
@@ -135,6 +138,12 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`emp_id`);
 
 --
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`product_id`);
+
+--
 -- Indexes for table `type`
 --
 ALTER TABLE `type`
@@ -154,7 +163,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `emp_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `emp_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `type`
