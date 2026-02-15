@@ -28,27 +28,34 @@
         <li class="nav-item">
           <a class="nav-link" href="/type">Type</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/employees">Employee</a>
-        </li>
+       
         <li class="nav-item">
           <a class="nav-link" href="/product_api">ProductAPI</a>
         </li>
          <li class="nav-item">
           <a class="nav-link" href="/customer_crud">Customer_crud</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/employee_crud">Employee_crud</a>
+      
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/employees">Employee</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/employee_crud">Employee_crud</a></li>
+            <li><a class="dropdown-item" href="/emp_crud_img">Emp_crud_img</a></li>
+          </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            Product
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/show_product">Showproduct</a></li>
             <li><a class="dropdown-item" href="/product">Product</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="/product_crud">Product_crud</a></li>
           </ul>
         </li>
         <li class="nav-item">
