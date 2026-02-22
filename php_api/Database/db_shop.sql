@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2026 at 12:33 PM
+-- Generation Time: Feb 22, 2026 at 01:25 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -24,6 +24,26 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `category_id` int(11) NOT NULL,
+  `category_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`category_id`, `category_name`) VALUES
+(1, 'เครื่องใช้ไฟฟ้า'),
+(2, 'เสื้อผ้า'),
+(3, 'รองเท้า');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customers`
 --
 
@@ -33,7 +53,7 @@ CREATE TABLE `customers` (
   `lastName` varchar(50) NOT NULL,
   `phone` varchar(15) NOT NULL,
   `username` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL
+  `password` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -41,10 +61,10 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `firstName`, `lastName`, `phone`, `username`, `password`) VALUES
-(1, 'สมชาย', 'ใจดี', '0812345678', 'somchai', 'pass1234'),
-(2, 'วิภา', 'สุขสันต์', '0898765432', 'wipa', 'wipa2025'),
-(3, 'John', 'Doe', '0991122334', 'johnd', 'securepwd'),
-(4, 'จันทิรา', 'โพธิ์ศาราช', '0855174652', 'ajfdlkf', '$2y$10$POlyQckDlsrQa');
+(4, 'จันทิรา', 'โพธิ์ศาราช', '0855174652', 'ajfdlkf', '$2y$10$POlyQckDlsrQa'),
+(5, 'khunaon', 'Janthi', '0855172774', 'khunaon', '$2y$10$kH8BL9jqV2I7a'),
+(10, 'yoyo', 'totot', '0851234567', 'staff', '$2y$10$lASXoOJegTnf7qEk/gWfgeB.B3DB9JaIsZIdGtyGRMQkRywTX2WC6'),
+(11, 'ลิงจั๊ก', 'รักจริง', '0812345678', 'admin', '$2y$10$ls5znkcwwSakqD6QNOvSiO5xcW9zu8nM1P0Z6K0KE1kRwH.JXrEu6');
 
 -- --------------------------------------------------------
 
@@ -88,6 +108,7 @@ CREATE TABLE `products` (
   `price` decimal(10,2) NOT NULL,
   `image` text DEFAULT NULL,
   `stock` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -95,11 +116,11 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`product_id`, `product_name`, `description`, `price`, `image`, `stock`, `created_at`) VALUES
-(00000000000, 'กางเกงขายาว', 'ผ้ายีนส์', '1999.00', '1771145621_download (2).jpg', 80, '2026-02-15 08:53:41'),
-(00000000001, 'เสื้อยืดคอกลม', 'เสื้อยืดผ้าฝ้าย 100% สวมใส่สบาย', '350.00', '1771144826_1771144641_123.jpg', 50, '2026-01-25 04:04:52'),
-(00000000002, 'กางเกงยีนส์', 'กางเกงยีนส์ทรงกระบอก สีฟ้าอ่อน', '799.00', '1771144926_11-1359.1.jpg', 30, '2026-01-25 04:04:52'),
-(00000000003, 'รองเท้าผ้าใบ', 'รองเท้าผ้าใบสีขาว ใส่ได้ทุกโอกาส', '1299.00', '1771146186_download.jpg', 20, '2026-01-25 04:04:52');
+INSERT INTO `products` (`product_id`, `product_name`, `description`, `price`, `image`, `stock`, `category_id`, `created_at`) VALUES
+(00000000000, 'กางเกงขายาว', 'ผ้ายีนส์', '1999.00', '1771145621_download (2).jpg', 80, 1, '2026-02-15 08:53:41'),
+(00000000001, 'เสื้อยืดคอกลม', 'เสื้อยืดผ้าฝ้าย 100% สวมใส่สบาย', '350.00', '1771144826_1771144641_123.jpg', 50, 2, '2026-01-25 04:04:52'),
+(00000000002, 'กางเกงยีนส์', 'กางเกงยีนส์ทรงกระบอก สีฟ้าอ่อน', '799.00', '1771144926_11-1359.1.jpg', 30, 3, '2026-01-25 04:04:52'),
+(00000000003, 'รองเท้าผ้าใบ', 'รองเท้าผ้าใบสีขาว ใส่ได้ทุกโอกาส', '1299.00', '1771745790_รองเท้าเซฟตี้มีมอก-2.png', 20, 1, '2026-01-25 04:04:52');
 
 -- --------------------------------------------------------
 
@@ -124,6 +145,12 @@ INSERT INTO `type` (`type_id`, `type_name`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`category_id`);
 
 --
 -- Indexes for table `customers`
@@ -154,10 +181,16 @@ ALTER TABLE `type`
 --
 
 --
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `employees`

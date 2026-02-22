@@ -3,7 +3,7 @@
     <h2 class="mb-3">รายการสินค้า</h2>
 
     <div class="mb-3">
-      <button class="btn btn-primary" @click="openAddModal">Add+</button>
+      <button class="btn btn-primary" @click="openAddModal"><i class="bi bi-plus-square"></i> Add</button>
     </div>
 
     <table class="table table-bordered table-striped">
@@ -11,6 +11,7 @@
         <tr>
           <th>ID</th>
           <th>ชื่อสินค้า</th>
+          <th>ประเภทสินค้า</th>
           <th>รายละเอียด</th>
           <th>ราคา</th>
           <th>จำนวน</th>
@@ -22,6 +23,7 @@
         <tr v-for="product in products" :key="product.product_id">
           <td>{{ product.product_id }}</td>
           <td>{{ product.product_name }}</td>
+          <td>{{ product.category_name }}</td>
           <td>{{ product.description }}</td>
           <td>{{ product.price }}</td>
           <td>{{ product.stock }}</td>
@@ -40,13 +42,13 @@
               class="btn btn-warning btn-sm me-2"
               @click="openEditModal(product)"
             >
-              แก้ไข
+            <i class="bi bi-pencil-square"></i>
             </button>
             <button
               class="btn btn-danger btn-sm"
               @click="deleteProduct(product.product_id)"
             >
-              ลบ
+            <i class="bi bi-trash3-fill"></i>
             </button>
           </td>
         </tr>
@@ -80,6 +82,16 @@
                   class="form-control"
                   required
                 />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ประเภทสินค้า</label>
+                <!-- Dropdown สำหรับเลือกประเภทสินค้า -->
+                <select v-model="editForm.category_id" class="form-select" required>
+                  <option value="" disabled>เลือกประเภทสินค้า</option>
+                  <option v-for="category in categories" :key="category.category_id" :value="category.category_id">
+                    {{ category.category_name }}
+                  </option>
+                </select>
               </div>
               <div class="mb-3">
                 <label class="form-label">รายละเอียด</label>
@@ -148,26 +160,31 @@ export default {
   name: "ProductList",
   setup() {
     const products = ref([]);
+    const categories = ref([]);  //เพิ่ม
     const loading = ref(true);
     const error = ref(null);
-    const isEditMode = ref(false); // ✅ เช็คโหมด
+
+    const isEditMode = ref(false);
+
     const editForm = ref({
       product_id: null,
       product_name: "",
+      category_id: "",    //เพิ่ม
       description: "",
       price: "",
       stock: "",
-      image: "",
+      image: ""
     });
+
     const newImageFile = ref(null);
     let modalInstance = null;
 
-    // โหลดข้อมูลสินค้า
+    // =========================
+    // โหลดสินค้า
+    // =========================
     const fetchProducts = async () => {
       try {
-        const res = await fetch(
-          "http://localhost/app-vue01/php_api/api_product.php"
-        );
+        const res = await fetch("http://localhost/app-vue01/php_api/api_product.php");
         const data = await res.json();
         products.value = data.success ? data.data : [];
       } catch (err) {
@@ -177,63 +194,97 @@ export default {
       }
     };
 
-    // เปิด Modal สำหรับเพิ่มสินค้า
+    // =========================
+    // โหลดประเภทสินค้า ✅ FIX   //เพิ่ม
+    // =========================
+    const fetchCategories = async () => {
+  try {
+    const res = await fetch(
+      "http://localhost/app-vue01/php_api/api_product.php?type=categories"
+    );
+
+    const data = await res.json();
+    categories.value = data.success ? data.data : [];
+  } catch (err) {
+    error.value = err.message;
+  }
+};
+
+    // =========================
+    // เพิ่มสินค้า
+    // =========================
     const openAddModal = () => {
       isEditMode.value = false;
+
       editForm.value = {
         product_id: null,
         product_name: "",
+        category_id: "",   // ✅ ต้อง reset  //เพิ่ม
         description: "",
         price: "",
         stock: "",
-        image: "",
+        image: ""
       };
+
       newImageFile.value = null;
 
       const modalEl = document.getElementById("editModal");
       modalInstance = new window.bootstrap.Modal(modalEl);
       modalInstance.show();
-
-      // ✅ รีเซ็ตค่า input file ให้ไม่แสดงชื่อไฟล์ค้าง
       const fileInput = modalEl.querySelector('input[type="file"]');
       if (fileInput) fileInput.value = "";
     };
 
-    // เปิด Modal สำหรับแก้ไขสินค้า
+    // =========================
+    // แก้ไขสินค้า
+    // =========================
     const openEditModal = (product) => {
       isEditMode.value = true;
       editForm.value = { ...product };
       newImageFile.value = null;
+
       const modalEl = document.getElementById("editModal");
       modalInstance = new window.bootstrap.Modal(modalEl);
       modalInstance.show();
     };
 
+    // =========================
+    // อัปโหลดรูป
+    // =========================
     const handleFileUpload = (event) => {
       newImageFile.value = event.target.files[0];
     };
 
-    // ✅ ใช้ฟังก์ชันเดียวในการเพิ่ม / แก้ไข
+    // =========================
+    // บันทึกสินค้า ✅ FIX
+    // =========================
     const saveProduct = async () => {
       const formData = new FormData();
+
       formData.append("action", isEditMode.value ? "update" : "add");
-      if (isEditMode.value)
+
+      if (isEditMode.value) {
         formData.append("product_id", editForm.value.product_id);
+      }
+
       formData.append("product_name", editForm.value.product_name);
+      formData.append("category_id", editForm.value.category_id); // ✅ สำคัญมาก //เพิ่ม
       formData.append("description", editForm.value.description);
       formData.append("price", editForm.value.price);
       formData.append("stock", editForm.value.stock);
-      if (newImageFile.value) formData.append("image", newImageFile.value);
+
+      if (newImageFile.value) {
+        formData.append("image", newImageFile.value);
+      }
 
       try {
-        const res = await fetch(
-          "http://localhost/app-vue01/php_api/api_product.php",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const res = await fetch("http://localhost/app-vue01/php_api/api_product.php", {
+          method: "POST",
+          body: formData
+        });
+
         const result = await res.json();
+
         if (result.message) {
           alert(result.message);
           fetchProducts();
@@ -246,7 +297,9 @@ export default {
       }
     };
 
+    // =========================
     // ลบสินค้า
+    // =========================
     const deleteProduct = async (id) => {
       if (!confirm("คุณแน่ใจหรือไม่ที่จะลบสินค้านี้?")) return;
 
@@ -255,17 +308,16 @@ export default {
       formData.append("product_id", id);
 
       try {
-        const res = await fetch(
-          "http://localhost/app-vue01/php_api/api_product.php",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const res = await fetch("http://localhost/app-vue01/php_api/api_product.php", {
+          method: "POST",
+          body: formData
+        });
+
         const result = await res.json();
+
         if (result.message) {
           alert(result.message);
-          products.value = products.value.filter((p) => p.product_id !== id);
+          products.value = products.value.filter(p => p.product_id !== id);
         } else if (result.error) {
           alert(result.error);
         }
@@ -274,10 +326,17 @@ export default {
       }
     };
 
-    onMounted(fetchProducts);
+    // =========================
+    // โหลดตอนเปิดหน้า ✅ FIX
+    // =========================
+    onMounted(() => {
+      fetchProducts();
+      fetchCategories();  //เพิ่ม
+    });
 
     return {
       products,
+      categories,   // ✅ ต้อง return  //เพิ่ม
       loading,
       error,
       editForm,
@@ -286,8 +345,8 @@ export default {
       openEditModal,
       handleFileUpload,
       saveProduct,
-      deleteProduct,
+      deleteProduct
     };
-  },
+  }
 };
 </script>
